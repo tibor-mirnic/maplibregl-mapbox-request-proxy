@@ -1,0 +1,33 @@
+{
+  "name": "maplibregl-mapbox-request-proxy",
+  "version": "1.0.0",
+  "description": "Example on how to secure access token by proxying requests",
+  "scripts": {
+    "start": "npm run start --workspaces"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tibor-mirnic/maplibregl-mapbox-request-proxy.git"
+  },
+  "keywords": [
+    "mapbox",
+    "mapbox-gl",
+    "mapbox-gl-js",
+    "maplibre",
+    "maplibre-gl",
+    "maplibre-gl-js",
+    "react-map-gl",
+    "react",
+    "proxy"
+  ],
+  "author": "Tibor Mirnic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tibor-mirnic/maplibregl-mapbox-request-proxy/issues"
+  },
+  "homepage": "https://github.com/tibor-mirnic/maplibregl-mapbox-request-proxy#readme",
+  "workspaces": [
+    "packages/server",
+    "packages/client"
+  ]
+}
