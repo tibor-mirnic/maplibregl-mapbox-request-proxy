@@ -1,10 +1,13 @@
 # maplibregl-mapbox-request-proxy
 
-Example on how to secure access token by proxying requests.
+This repo provides an example on how to secure access token, reqiured by `MapBox`, by proxying requests.
 
-All of the heavy lifting is done on the `client` side, server is just appending the token on requests.
+Most of the heavy lifting is done on the client side. Server has two purposes:
 
-All necessary utilities for request transformation are located in [mapbox](packages/client/src/transformer/mapbox.ts).
+- Append the access token on each request
+- Cleanup the access token from `MapBox Api` response (`tiles` urls)
+
+Necessary utilities for request transformation are located in [mapbox](packages/client/src/transformer/mapbox.ts).
 
 # Usage
 
@@ -17,9 +20,11 @@ import { transformRequest } from "./transformer";
 />;
 ```
 
-# Local Development
+# Install
 
 Install packages with `npm ci`.
+
+# Run
 
 Run `npm run start` which will run `client` and `server` in parallel.
 
