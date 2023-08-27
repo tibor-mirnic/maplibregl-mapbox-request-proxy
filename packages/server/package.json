@@ -5,7 +5,8 @@
   "main": "server.ts",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.ts"
+    "start": "NODE_OPTIONS='--loader ts-node/esm' ts-node server.ts",
+    "watch": "nodemon server.ts"
   },
   "dependencies": {
     "express": "^4.18.2",

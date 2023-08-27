@@ -1,5 +1,5 @@
 {
   "execMap": {
-    "ts": "NODE_OPTIONS='--loader ts-node/esm' ts-node server.ts"
+    "ts": "NODE_OPTIONS='--loader ts-node/esm' ts-node"
   }
 }

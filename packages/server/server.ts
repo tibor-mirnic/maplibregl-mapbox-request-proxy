@@ -12,15 +12,17 @@ const app = express();
 const accessTokenRegex = /\?access_token=[^\\"]*/g;
 
 app.get("/proxy", async (req, res) => {
-  console.log(req.query);
-  const { resourceUrl } = req.query as { resourceUrl: string };
+  const { resourceUrl, tiles } = req.query as unknown as {
+    resourceUrl: string;
+    tiles?: boolean;
+  };
 
   let hasParams = false;
   if (resourceUrl.lastIndexOf("?") > -1) {
     hasParams = true;
   }
 
-  const apiUrl = `${resourceUrl}${
+  const apiUrl = `${tiles ? "" : resourceUrl}${
     hasParams ? "&" : "?"
   }access_token=${accessToken}`;
 
