@@ -6,15 +6,16 @@ dotenv.config();
 dotenv.config({ path: `.env.local`, override: true });
 
 const accessToken = process.env.MAP_BOX_ACCESS_TOKEN;
+const mapboxApiUrl = "https://api.mapbox.com";
 const port = 3005;
 const app = express();
 
 const accessTokenRegex = /\?access_token=[^\\"]*/g;
 
 app.get("/proxy", async (req, res) => {
-  const { resourceUrl, tiles } = req.query as unknown as {
+  const { resourceUrl, tiles } = req.query as {
     resourceUrl: string;
-    tiles?: boolean;
+    tiles: string;
   };
 
   let hasParams = false;
@@ -22,7 +23,10 @@ app.get("/proxy", async (req, res) => {
     hasParams = true;
   }
 
-  const apiUrl = `${tiles ? "" : resourceUrl}${
+  const forwardUrl =
+    tiles === "true" ? resourceUrl : `${mapboxApiUrl}${resourceUrl}`;
+
+  const apiUrl = `${forwardUrl}${
     hasParams ? "&" : "?"
   }access_token=${accessToken}`;
 
@@ -42,5 +46,5 @@ app.get("/proxy", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Maps listening on port ${port}`);
+  console.log(`Maps Proxy listening on port ${port}`);
 });

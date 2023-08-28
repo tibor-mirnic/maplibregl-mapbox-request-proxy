@@ -1,6 +1,6 @@
 # maplibregl-mapbox-request-proxy
 
-This repo provides an example on how to secure access token, reqiured by `MapBox`, by proxying requests.
+This repo provides an example on how to secure access token, required by `MapBox`, by proxying requests.
 
 Most of the heavy lifting is done on the client side. Server has two purposes:
 

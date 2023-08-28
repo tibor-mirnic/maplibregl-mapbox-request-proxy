@@ -1,7 +1,5 @@
 import { ResourceType, TransformMapboxUrl, UrlObject } from "./models";
 import webpSupported from "./webp-supported";
-
-const API_URL = "https://api.mapbox.com";
 const urlRegex = /^(\w+):\/\/([^/?]*)(\/[^?]+)?\??(.+)?/;
 
 export const transformMapboxUrl: TransformMapboxUrl = (url, resourceType) => {
@@ -54,40 +52,27 @@ const parseUrl = (url: string): UrlObject => {
 const formatUrl = (obj: UrlObject, tiles: boolean = false): string => {
   const params = obj.params.length ? `?${obj.params.join("&")}` : "";
 
-  return `/maps/proxy?${tiles ? "tiles&" : ""}resourceUrl=${obj.protocol}://${
-    obj.authority
-  }${obj.path}${params}`;
-};
-
-const makeApiUrl = (urlObject: UrlObject, tiles?: boolean): string => {
-  const apiUrlObject = parseUrl(API_URL);
-  urlObject.protocol = apiUrlObject.protocol;
-  urlObject.authority = apiUrlObject.authority;
-
-  if (urlObject.protocol === "http") {
-    const i = urlObject.params.indexOf("secure");
-    if (i >= 0) urlObject.params.splice(i, 1);
+  if (tiles) {
+    return `/maps/proxy?${tiles ? "tiles=true&" : ""}resourceUrl=${
+      obj.protocol
+    }://${obj.authority}${obj.path}${params}`;
   }
 
-  if (apiUrlObject.path !== "/") {
-    urlObject.path = `${apiUrlObject.path}${urlObject.path}`;
-  }
-
-  return formatUrl(urlObject, tiles);
+  return `/maps/proxy?resourceUrl=${obj.path}${params}`;
 };
 
 const normalizeStyleURL = (url: string): string => {
   const urlObject = parseUrl(url);
   urlObject.path = `/styles/v1${urlObject.path}`;
 
-  return makeApiUrl(urlObject);
+  return formatUrl(urlObject);
 };
 
 const normalizeGlyphsURL = (url: string): string => {
   const urlObject = parseUrl(url);
   urlObject.path = `/fonts/v1${urlObject.path}`;
 
-  return makeApiUrl(urlObject);
+  return formatUrl(urlObject);
 };
 
 const normalizeSourceURL = (url: string): string => {
@@ -96,7 +81,7 @@ const normalizeSourceURL = (url: string): string => {
   // TileJSON requests need a secure flag appended to their URLs so
   // that the server knows to send SSL-ified resource references.
   urlObject.params.push("secure");
-  return makeApiUrl(urlObject);
+  return formatUrl(urlObject);
 };
 
 const normalizeSpriteURL = (url: string): string => {
@@ -108,11 +93,10 @@ const normalizeSpriteURL = (url: string): string => {
 
   urlObject.path = `/styles/v1${path[0]}/sprite@${path[1]}`;
 
-  return makeApiUrl(urlObject);
+  return formatUrl(urlObject);
 };
 
 const imageExtensionRegex = /(\.(png|jpg)\d*)(?=$)/g;
-const tileURLAPIPrefixRegex = /^.?\/v4\//g;
 const normalizeTileURL = (
   tileURL: string,
   tileSize?: number | null
@@ -128,8 +112,6 @@ const normalizeTileURL = (
     imageExtensionRegex,
     `${suffix}${extension}`
   );
-  urlObject.path = urlObject.path.replace(tileURLAPIPrefixRegex, "/");
-  urlObject.path = `/v4${urlObject.path}`;
 
-  return makeApiUrl(urlObject, true);
+  return formatUrl(urlObject, true);
 };
