@@ -86,12 +86,13 @@ const normalizeSourceURL = (url: string): string => {
 
 const normalizeSpriteURL = (url: string): string => {
   const urlObject = parseUrl(url);
-  const path = urlObject.path.split("@");
+  const separator = devicePixelRatio >= 2 ? "@" : ".";
+  const path = urlObject.path.split(separator);
   // const pathNext = path[0].split("@");
   // urlObject.path = `/styles/v1${pathNext[0]}/sprite@${pathNext[1]}.${path[1]}`;
   // mapbox://sprites/mapbox/streets-v12@2x.json
 
-  urlObject.path = `/styles/v1${path[0]}/sprite@${path[1]}`;
+  urlObject.path = `/styles/v1${path[0]}/sprite${separator}${path[1]}`;
 
   return formatUrl(urlObject);
 };
